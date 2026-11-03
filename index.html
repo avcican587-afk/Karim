@@ -36,13 +36,13 @@
       z-index: 100;
       position: absolute;
       padding: 30px 40px;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
       border-radius: 20px;
-      border: 1px solid rgba(255, 105, 180, 0.3);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 75, 75, 0.4);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
       animation: fadeInMsg 2s ease-out forwards;
-      max-width: 80%;
+      max-width: 85%;
     }
 
     @keyframes fadeInMsg {
@@ -51,24 +51,26 @@
     }
 
     .message h1 {
-      font-size: 2.5rem;
+      font-size: 1.8rem;
       margin-bottom: 15px;
-      background: linear-gradient(45deg, #ff758c, #ff7eb3);
+      line-height: 1.4;
+      background: linear-gradient(45deg, #ff416c, #ff4b2b);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(255, 117, 140, 0.5);
+      text-shadow: 0 0 20px rgba(255, 65, 108, 0.5);
     }
 
     .message p {
-      font-size: 1.2rem;
-      opacity: 0.9;
+      font-size: 1.3rem;
+      opacity: 0.95;
       letter-spacing: 1px;
+      font-weight: bold;
     }
 
     /* Uçuşan Kalpler */
     .floating-heart {
       position: absolute;
-      font-size: 24px;
+      font-size: 26px;
       animation: flyUp 4s linear forwards;
       z-index: 50;
       user-select: none;
@@ -83,27 +85,28 @@
         opacity: 1;
       }
       100% {
-        transform: translateY(-20vh) scale(1.4);
+        transform: translateY(-20vh) scale(1.5);
         opacity: 0;
       }
     }
 
-    /* Açılan Güller ve Çiçekler */
-    .growing-flower {
+    /* Kırmızı Güllerin Belirme Efekti */
+    .red-rose {
       position: absolute;
-      transform-origin: bottom center;
-      animation: bloomVideo 3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      font-size: 42px;
+      animation: bloomRedRose 3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
       z-index: 10;
-      filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.6));
+      filter: drop-shadow(0 0 12px rgba(255, 0, 0, 0.7));
+      user-select: none;
     }
 
-    @keyframes bloomVideo {
+    @keyframes bloomRedRose {
       0% {
-        transform: scale(0) translateY(50px) rotate(-10deg);
+        transform: scale(0) translateY(40px) rotate(-15deg);
         opacity: 0;
       }
       60% {
-        transform: scale(1.2) translateY(-10px) rotate(5deg);
+        transform: scale(1.25) translateY(-5deg) rotate(5deg);
         opacity: 1;
       }
       100% {
@@ -117,7 +120,7 @@
 
   <!-- Yıldızlar -->
   <script>
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 90; i++) {
       const star = document.createElement('div');
       star.className = 'star';
       star.style.width = Math.random() * 3 + 'px';
@@ -129,72 +132,70 @@
     }
   </script>
 
-  <!-- Romantik Yazı (Burayı dilediğin gibi değiştirebilirsin) -->
+  <!-- Romantik Yazı -->
   <div class="message" id="romanticMsg">
     <h1>Geriye dönüp baktığımda hayatımı bahara çevirdiğini görüyorum. Hayatıma kattığın tüm güzellikler için küçük bir teşekkür..🌹</h1>
-    <p>SENİ ÇOK SEVİYORUMM. ❤️ </p>
+    <p>SENİ ÇOK SEVİYORUMM. ❤️</p>
   </div>
 
   <script>
-    const flowers = ['🌹', '🌷', '🌸', '🌺', '💐', '🌻'];
-
-    // 1. Aşama: Linke tıklandığı an uçuşan kalpler başlasın
+    // 1. Aşama: Uçuşan kalpler
     function startHearts() {
-      for (let i = 0; i < 25; i++) {
+      for (let i = 0; i < 30; i++) {
         setTimeout(() => {
           const heart = document.createElement('div');
           heart.className = 'floating-heart';
           heart.innerHTML = '❤️';
           heart.style.left = Math.random() * window.innerWidth + 'px';
-          heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+          heart.style.fontSize = (Math.random() * 22 + 20) + 'px';
           document.body.appendChild(heart);
 
           setTimeout(() => heart.remove(), 4000);
-        }, i * 150);
+        }, i * 130);
       }
     }
 
-    // 2. Aşama: Yazı belirdikten sonra ekranın her yerinde güller patlasın (Video gibi)
-    function startGardenVideo() {
-      // Önce kalpler başlasın
+    // 2. Aşama: Kalpler bittikten sonra ekranı kaplayan kırmızı güller
+    function startRedRosesGarden() {
       startHearts();
 
-      // 3 saniye sonra yazı yavaşça kaybolsun ki bahçe tam ekran görünsün
+      // 4.5 saniye sonra yazı yavaşça kaybolur (Okuması için biraz daha süre tanındı)
       setTimeout(() => {
         const msg = document.getElementById('romanticMsg');
         msg.style.transition = 'opacity 1.5s ease';
         msg.style.opacity = '0';
         setTimeout(() => msg.remove(), 1500);
-      }, 3500);
+      }, 4500);
 
-      // Ardından ekrana peş peşe onlarca gül fidesi/çiçek açılsın
-      let flowerCount = 0;
-      const interval = setInterval(() => {
-        if (flowerCount > 45) {
-          clearInterval(interval);
-          return;
-        }
+      // Yazı gittikten sonra ekranda peş peşe kırmızı güller açmaya başlar
+      setTimeout(() => {
+        let roseCount = 0;
+        const interval = setInterval(() => {
+          if (roseCount > 50) { 
+            clearInterval(interval);
+            return;
+          }
 
-        const flower = document.createElement('div');
-        flower.className = 'growing-flower';
-        flower.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
-        
-        // Ekranın rastgele yerlerine dağılsın
-        const posX = Math.random() * (window.innerWidth - 60);
-        const posY = Math.random() * (window.innerHeight - 60);
-        
-        flower.style.left = posX + 'px';
-        flower.style.top = posY + 'px';
-        flower.style.fontSize = (Math.random() * 30 + 35) + 'px'; // Büyük ve belirgin
+          const rose = document.createElement('div');
+          rose.className = 'red-rose';
+          rose.innerHTML = '🌹'; 
+          
+          const posX = Math.random() * (window.innerWidth - 60);
+          const posY = Math.random() * (window.innerHeight - 60);
+          
+          rose.style.left = posX + 'px';
+          rose.style.top = posY + 'px';
+          rose.style.fontSize = (Math.random() * 35 + 35) + 'px';
 
-        document.body.appendChild(flower);
-        flowerCount++;
-      }, 120); // Her 0.12 saniyede bir yeni bir gül açar
+          document.body.appendChild(rose);
+          roseCount++;
+        }, 100);
+      }, 5500);
     }
 
-    // Sayfa açıldıktan 1 saniye sonra bu sihirli şölen otomatik başlar
+    // Sayfa açıldıktan 1 saniye sonra şölen otomatik başlar
     window.onload = () => {
-      setTimeout(startGardenVideo, 1000);
+      setTimeout(startRedRosesGarden, 1000);
     };
   </script>
 
