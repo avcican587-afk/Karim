@@ -92,31 +92,35 @@
       }
     }
 
-    /* Doğrudan Serbest Büyüyen Fide ve Gül Animasyonu */
-    .free-rose {
+    /* Tek ve Büyük Büyüyen Gül Sahnesi */
+    .single-growing-rose {
       position: absolute;
-      font-size: 45px;
-      transform-origin: bottom center;
-      animation: bloomFree 2.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       z-index: 10;
-      filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
-      user-select: none;
       opacity: 0;
+      transform: scale(0.2);
+      animation: cinematicShow 4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
-    @keyframes bloomFree {
+    @keyframes cinematicShow {
       0% {
-        transform: scale(0.1) translateY(60px) rotate(-15deg);
+        transform: scale(0.2) translateY(80px);
         opacity: 0;
       }
-      60% {
-        transform: scale(1.2) translateY(-10px) rotate(5deg);
+      100% {
+        transform: scale(1.6) translateY(0);
         opacity: 1;
       }
-      100% {
-        transform: scale(1) translateY(0) rotate(0deg);
-        opacity: 0.98;
-      }
+    }
+
+    .rose-display {
+      font-size: 90px;
+      filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.85));
+      user-select: none;
+      transition: transform 0.5s ease;
     }
   </style>
 </head>
@@ -143,7 +147,7 @@
   </div>
 
   <script>
-    // 1. Aşama: Yazı ekranda dururken etrafta kalplerin uçuşması
+    // 1. Aşama: Yazı ekrandayken etrafta kalplerin uçuşması
     function startHeartsShow() {
       let heartCount = 0;
       const heartInterval = setInterval(() => {
@@ -164,8 +168,8 @@
       }, 100);
     }
 
-    // 2. Aşama: Yazı kalkar ve fidelerden açılan kırmızı güller tüm ekranı sarar
-    function startFreeRoseGarden() {
+    // 2. Aşama: Yazı kalkar ve ekranın tam ortasında tek bir gül sıfırdan fidan halinden açılışına kadar evrim geçirir
+    function startSingleRoseEvolution() {
       startHeartsShow();
 
       // 5 saniye sonra yazı yumuşakça kaybolur
@@ -175,43 +179,43 @@
         setTimeout(() => msg.remove(), 1500);
       }, 5000);
 
-      // Yazı kaybolduktan sonra ekranda sırayla filizlenen ve açılan güller belirir
+      // Yazı kaybolduktan hemen sonra ekranın ortasında tek gül doğar ve evrimleşir
       setTimeout(() => {
-        let count = 0;
-        const gardenInterval = setInterval(() => {
-          if (count > 50) { // Onlarca serbest fide ve açmış gül ekranı doldurur
-            clearInterval(gardenInterval);
-            return;
-          }
+        const container = document.createElement('div');
+        container.className = 'single-growing-rose';
 
-          const rose = document.createElement('div');
-          rose.className = 'free-rose';
+        const roseEl = document.createElement('div');
+        roseEl.className = 'rose-display';
 
-          // Fideden goncaya, goncadan açmış kırmızı güle doğru geçiş evreleri[cite: 7]
-          const stages = ['🌱', '🌿', '🌷', '🌹', '🌹'];
-          rose.innerHTML = stages[0];
-          
-          // Adım adım büyüme evresi taklidi
-          setTimeout(() => rose.innerHTML = stages[1], 500);
-          setTimeout(() => rose.innerHTML = stages[2], 1000);
-          setTimeout(() => rose.innerHTML = stages[3], 1500);
+        // Gönderdiğin gelişim şemasındaki gibi aşama aşama büyüme evreleri[cite: 7]
+        // 🌱 (Tohum/Filiz) -> 🌿 (Yeşil yapraklı sap) -> 🌷 (Gonca) -> 🌹 (Tam açmış büyük kırmızı gül)
+        const growthStages = ['🌱', '🌿', '🌷', '🌹'];
+        
+        roseEl.innerHTML = growthStages[0]; // İlk an: Filiz
+        
+        // Akıcı zaman ayarlı geçişler (Her aşama gerçek bir video gibi akar)
+        setTimeout(() => { roseEl.innerHTML = growthStages[1]; }, 900);
+        setTimeout(() => { roseEl.innerHTML = growthStages[2]; }, 1800);
+        setTimeout(() => { 
+          roseEl.innerHTML = growthStages[3]; 
+          // Son açılış anında tatlı bir büyüme efekti
+          roseEl.style.transform = 'scale(1.15)';
+          setTimeout(() => roseEl.style.transform = 'scale(1)', 300);
+        }, 2700);
 
-          const posX = Math.random() * (window.innerWidth - 60);
-          const posY = Math.random() * (window.innerHeight - 60);
+        container.appendChild(roseEl);
+        
+        // Tam ekranın ortasına konumlandırılır
+        container.style.left = (window.innerWidth / 2 - 45) + 'px';
+        container.style.top = (window.innerHeight / 2 - 45) + 'px';
 
-          rose.style.left = posX + 'px';
-          rose.style.top = posY + 'px';
-          rose.style.fontSize = (Math.random() * 38 + 32) + 'px';
-
-          document.body.appendChild(rose);
-          count++;
-        }, 120);
+        document.body.appendChild(container);
       }, 6200);
     }
 
-    // Sayfa yüklendikten 1 saniye sonra bu akış otomatik başlar
+    // Sayfa yüklendikten 1 saniye sonra senaryo başlar
     window.onload = () => {
-      setTimeout(startFreeRoseGarden, 1000);
+      setTimeout(startSingleRoseEvolution, 1000);
     };
   </script>
 
