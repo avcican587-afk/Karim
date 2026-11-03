@@ -92,32 +92,30 @@
       }
     }
 
-    /* Önce Yeşil Fide/Gonca, Sonra Açılan Gül Animasyonu */
-    .growing-rose-container {
+    /* Doğrudan Serbest Büyüyen Fide ve Gül Animasyonu */
+    .free-rose {
       position: absolute;
-      font-size: 42px;
+      font-size: 45px;
       transform-origin: bottom center;
-      animation: bloomFromGreen 2.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      animation: bloomFree 2.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
       z-index: 10;
-      filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.7));
+      filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
       user-select: none;
       opacity: 0;
     }
 
-    @keyframes bloomFromGreen {
+    @keyframes bloomFree {
       0% {
-        transform: scale(0.1) translateY(50px) rotate(-15deg);
+        transform: scale(0.1) translateY(60px) rotate(-15deg);
         opacity: 0;
-        filter: hue-rotate(90deg) drop-shadow(0 0 5px rgba(0, 255, 0, 0.8)); /* Başlangıçta yeşilimsi ton/fide havası */
       }
-      50% {
-        transform: scale(0.8) translateY(10px) rotate(5deg);
-        opacity: 0.8;
+      60% {
+        transform: scale(1.2) translateY(-10px) rotate(5deg);
+        opacity: 1;
       }
       100% {
         transform: scale(1) translateY(0) rotate(0deg);
         opacity: 0.98;
-        filter: hue-rotate(0deg) drop-shadow(0 0 15px rgba(255, 0, 0, 0.8)); /* Tam açılmış kırmızı gül */
       }
     }
   </style>
@@ -145,11 +143,11 @@
   </div>
 
   <script>
-    // 1. Aşama: Yazı ekranda dururken kalplerin uçuşması
+    // 1. Aşama: Yazı ekranda dururken etrafta kalplerin uçuşması
     function startHeartsShow() {
       let heartCount = 0;
       const heartInterval = setInterval(() => {
-        if (heartCount > 40) {
+        if (heartCount > 35) {
           clearInterval(heartInterval);
           return;
         }
@@ -166,8 +164,8 @@
       }, 100);
     }
 
-    // 2. Aşama: Yazı kaybolur ve yeşil goncalardan açılan kırmızı güller bahçesi başlar
-    function startRoseGardenCinematic() {
+    // 2. Aşama: Yazı kalkar ve fidelerden açılan kırmızı güller tüm ekranı sarar
+    function startFreeRoseGarden() {
       startHeartsShow();
 
       // 5 saniye sonra yazı yumuşakça kaybolur
@@ -177,38 +175,43 @@
         setTimeout(() => msg.remove(), 1500);
       }, 5000);
 
-      // Yazı gittikten hemen sonra yeşil goncalardan açılan kırmızı güller ekrana yayılır
+      // Yazı kaybolduktan sonra ekranda sırayla filizlenen ve açılan güller belirir
       setTimeout(() => {
-        let roseCount = 0;
-        const roseInterval = setInterval(() => {
-          if (roseCount > 55) {
-            clearInterval(roseInterval);
+        let count = 0;
+        const gardenInterval = setInterval(() => {
+          if (count > 50) { // Onlarca serbest fide ve açmış gül ekranı doldurur
+            clearInterval(gardenInterval);
             return;
           }
 
           const rose = document.createElement('div');
-          rose.className = 'growing-rose-container';
-          
-          // Videodaki gibi yeşil yapraklı doğa/gonca emojisiyle başlayıp kırmızı güle evrilen kombinasyon
+          rose.className = 'free-rose';
+
+          // Fideden goncaya, goncadan açmış kırmızı güle doğru geçiş evreleri[cite: 7]
           const stages = ['🌱', '🌿', '🌷', '🌹', '🌹'];
-          rose.innerHTML = stages[Math.floor(Math.random() * stages.length)];
+          rose.innerHTML = stages[0];
           
-          const posX = Math.random() * (window.innerWidth - 70);
-          const posY = Math.random() * (window.innerHeight - 70);
-          
+          // Adım adım büyüme evresi taklidi
+          setTimeout(() => rose.innerHTML = stages[1], 500);
+          setTimeout(() => rose.innerHTML = stages[2], 1000);
+          setTimeout(() => rose.innerHTML = stages[3], 1500);
+
+          const posX = Math.random() * (window.innerWidth - 60);
+          const posY = Math.random() * (window.innerHeight - 60);
+
           rose.style.left = posX + 'px';
           rose.style.top = posY + 'px';
-          rose.style.fontSize = (Math.random() * 38 + 35) + 'px';
+          rose.style.fontSize = (Math.random() * 38 + 32) + 'px';
 
           document.body.appendChild(rose);
-          roseCount++;
-        }, 90);
+          count++;
+        }, 120);
       }, 6200);
     }
 
-    // Sayfa yüklendikten 1 saniye sonra bu akış başlar
+    // Sayfa yüklendikten 1 saniye sonra bu akış otomatik başlar
     window.onload = () => {
-      setTimeout(startRoseGardenCinematic, 1000);
+      setTimeout(startFreeRoseGarden, 1000);
     };
   </script>
 
