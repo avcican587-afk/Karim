@@ -30,7 +30,7 @@
       50% { opacity: 1; transform: scale(1.2); }
     }
 
-    /* Romantik Karşılama Yazısı (İlk aşamada kalıcı) */
+    /* Romantik Karşılama Yazısı */
     .message {
       text-align: center;
       z-index: 100;
@@ -69,7 +69,7 @@
       color: #ffb6c1;
     }
 
-    /* Uçuşan Kalpler (Yazı ekrandayken başlar) */
+    /* Uçuşan Kalpler */
     .floating-heart {
       position: absolute;
       font-size: 28px;
@@ -92,29 +92,32 @@
       }
     }
 
-    /* Gerçekçi Kırmızı Gül Bahçesi Açılış Animasyonu */
-    .garden-rose {
+    /* Önce Yeşil Fide/Gonca, Sonra Açılan Gül Animasyonu */
+    .growing-rose-container {
       position: absolute;
-      font-size: 48px;
-      animation: bloomRealRose 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      font-size: 42px;
+      transform-origin: bottom center;
+      animation: bloomFromGreen 2.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
       z-index: 10;
-      filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
+      filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.7));
       user-select: none;
       opacity: 0;
     }
 
-    @keyframes bloomRealRose {
+    @keyframes bloomFromGreen {
       0% {
-        transform: scale(0) translateY(60px) rotate(-25deg);
+        transform: scale(0.1) translateY(50px) rotate(-15deg);
         opacity: 0;
+        filter: hue-rotate(90deg) drop-shadow(0 0 5px rgba(0, 255, 0, 0.8)); /* Başlangıçta yeşilimsi ton/fide havası */
       }
-      70% {
-        transform: scale(1.3) translateY(-10px) rotate(8deg);
-        opacity: 1;
+      50% {
+        transform: scale(0.8) translateY(10px) rotate(5deg);
+        opacity: 0.8;
       }
       100% {
         transform: scale(1) translateY(0) rotate(0deg);
         opacity: 0.98;
+        filter: hue-rotate(0deg) drop-shadow(0 0 15px rgba(255, 0, 0, 0.8)); /* Tam açılmış kırmızı gül */
       }
     }
   </style>
@@ -142,7 +145,7 @@
   </div>
 
   <script>
-    // 1. Aşama: Yazı ekranda dururken kalplerin açılması ve tüm ekranı sarması
+    // 1. Aşama: Yazı ekranda dururken kalplerin uçuşması
     function startHeartsShow() {
       let heartCount = 0;
       const heartInterval = setInterval(() => {
@@ -163,47 +166,47 @@
       }, 100);
     }
 
-    // 2. Aşama: Kalpler ve yazı geçiş yapıp, ekranı gerçekçi kırmızı gül bahçesine bırakır
+    // 2. Aşama: Yazı kaybolur ve yeşil goncalardan açılan kırmızı güller bahçesi başlar
     function startRoseGardenCinematic() {
-      // Önce kalpler başlasın (Yazı silinmeden ekranda dans ederler)
       startHeartsShow();
 
-      // 5 saniye sonra yazı ve kalan kalpler yumuşakça kaybolur
+      // 5 saniye sonra yazı yumuşakça kaybolur
       setTimeout(() => {
         const msg = document.getElementById('romanticMsg');
         msg.style.opacity = '0';
         setTimeout(() => msg.remove(), 1500);
       }, 5000);
 
-      // Yazı gittikten hemen sonra muazzam gül bahçesi açılış animasyonu patlar
+      // Yazı gittikten hemen sonra yeşil goncalardan açılan kırmızı güller ekrana yayılır
       setTimeout(() => {
         let roseCount = 0;
         const roseInterval = setInterval(() => {
-          if (roseCount > 60) { // Onlarca gerçekçi gül ekranı tamamen sarar
+          if (roseCount > 55) {
             clearInterval(roseInterval);
             return;
           }
 
           const rose = document.createElement('div');
-          rose.className = 'garden-rose';
-          // En gerçekçi gül ve bahçe görselleri kombinasyonu
-          const roseTypes = ['🌹', '🌹', '🌺', '🌹'];
-          rose.innerHTML = roseTypes[Math.floor(Math.random() * roseTypes.length)];
+          rose.className = 'growing-rose-container';
+          
+          // Videodaki gibi yeşil yapraklı doğa/gonca emojisiyle başlayıp kırmızı güle evrilen kombinasyon
+          const stages = ['🌱', '🌿', '🌷', '🌹', '🌹'];
+          rose.innerHTML = stages[Math.floor(Math.random() * stages.length)];
           
           const posX = Math.random() * (window.innerWidth - 70);
           const posY = Math.random() * (window.innerHeight - 70);
           
           rose.style.left = posX + 'px';
           rose.style.top = posY + 'px';
-          rose.style.fontSize = (Math.random() * 40 + 35) + 'px'; // Büyük ve etkileyici
+          rose.style.fontSize = (Math.random() * 38 + 35) + 'px';
 
           document.body.appendChild(rose);
           roseCount++;
-        }, 80);
+        }, 90);
       }, 6200);
     }
 
-    // Sayfa yüklendikten 1 saniye sonra bu romantik senaryo başlar
+    // Sayfa yüklendikten 1 saniye sonra bu akış başlar
     window.onload = () => {
       setTimeout(startRoseGardenCinematic, 1000);
     };
