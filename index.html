@@ -92,8 +92,8 @@
       }
     }
 
-    /* Tek ve Büyük Büyüyen Gül Sahnesi */
-    .single-growing-rose {
+    /* Tek Fidenin Gelişim ve Açılış Alanı */
+    .single-plant-container {
       position: absolute;
       display: flex;
       flex-direction: column;
@@ -101,26 +101,19 @@
       justify-content: center;
       z-index: 10;
       opacity: 0;
-      transform: scale(0.2);
-      animation: cinematicShow 4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      transform: scale(0.3);
+      animation: showPlant 1s ease forwards;
     }
 
-    @keyframes cinematicShow {
-      0% {
-        transform: scale(0.2) translateY(80px);
-        opacity: 0;
-      }
-      100% {
-        transform: scale(1.6) translateY(0);
-        opacity: 1;
-      }
+    @keyframes showPlant {
+      to { opacity: 1; transform: scale(1); }
     }
 
-    .rose-display {
+    .plant-stage {
       font-size: 90px;
       filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.85));
       user-select: none;
-      transition: transform 0.5s ease;
+      transition: transform 0.4s ease;
     }
   </style>
 </head>
@@ -147,7 +140,7 @@
   </div>
 
   <script>
-    // 1. Aşama: Yazı ekrandayken etrafta kalplerin uçuşması
+    // 1. Aşama: Yazı ekranda dururken kalplerin uçuşması
     function startHeartsShow() {
       let heartCount = 0;
       const heartInterval = setInterval(() => {
@@ -168,8 +161,8 @@
       }, 100);
     }
 
-    // 2. Aşama: Yazı kalkar ve ekranın tam ortasında tek bir gül sıfırdan fidan halinden açılışına kadar evrim geçirir
-    function startSingleRoseEvolution() {
+    // 2. Aşama: Yazı kaybolur ve ekranın ortasında TEK bir fideden güle evrilen mucize başlar
+    function startSinglePlantEvolution() {
       startHeartsShow();
 
       // 5 saniye sonra yazı yumuşakça kaybolur
@@ -179,33 +172,31 @@
         setTimeout(() => msg.remove(), 1500);
       }, 5000);
 
-      // Yazı kaybolduktan hemen sonra ekranın ortasında tek gül doğar ve evrimleşir
+      // Yazı kaybolduktan hemen sonra ekranın tam ortasında tek bir fide belirir ve büyür[cite: 7]
       setTimeout(() => {
         const container = document.createElement('div');
-        container.className = 'single-growing-rose';
+        container.className = 'single-plant-container';
 
-        const roseEl = document.createElement('div');
-        roseEl.className = 'rose-display';
+        const plantEl = document.createElement('div');
+        plantEl.className = 'plant-stage';
 
-        // Gönderdiğin gelişim şemasındaki gibi aşama aşama büyüme evreleri[cite: 7]
-        // 🌱 (Tohum/Filiz) -> 🌿 (Yeşil yapraklı sap) -> 🌷 (Gonca) -> 🌹 (Tam açmış büyük kırmızı gül)
-        const growthStages = ['🌱', '🌿', '🌷', '🌹'];
+        // Gönderdiğin gelişim şemasındaki aşamalar: Tohum/Filiz -> Yeşil Sap -> Gonca -> Açmış Gül[cite: 7]
+        const stages = ['🌱', '🌿', '🌷', '🌹'];
         
-        roseEl.innerHTML = growthStages[0]; // İlk an: Filiz
+        plantEl.innerHTML = stages[0]; // 1. An: Minik Filiz
         
-        // Akıcı zaman ayarlı geçişler (Her aşama gerçek bir video gibi akar)
-        setTimeout(() => { roseEl.innerHTML = growthStages[1]; }, 900);
-        setTimeout(() => { roseEl.innerHTML = growthStages[2]; }, 1800);
+        // Akıcı zaman ayarlı evrim geçişleri
+        setTimeout(() => { plantEl.innerHTML = stages[1]; }, 900);   // Yeşil yapraklı sap
+        setTimeout(() => { plantEl.innerHTML = stages[2]; }, 1800);  // Gonca hali
         setTimeout(() => { 
-          roseEl.innerHTML = growthStages[3]; 
-          // Son açılış anında tatlı bir büyüme efekti
-          roseEl.style.transform = 'scale(1.15)';
-          setTimeout(() => roseEl.style.transform = 'scale(1)', 300);
+          plantEl.innerHTML = stages[3]; // Tam açmış kırmızı gül
+          plantEl.style.transform = 'scale(1.2)';
+          setTimeout(() => plantEl.style.transform = 'scale(1)', 300);
         }, 2700);
 
-        container.appendChild(roseEl);
+        container.appendChild(plantEl);
         
-        // Tam ekranın ortasına konumlandırılır
+        // Tam ekranın ortasına konumlandırma
         container.style.left = (window.innerWidth / 2 - 45) + 'px';
         container.style.top = (window.innerHeight / 2 - 45) + 'px';
 
@@ -215,7 +206,7 @@
 
     // Sayfa yüklendikten 1 saniye sonra senaryo başlar
     window.onload = () => {
-      setTimeout(startSingleRoseEvolution, 1000);
+      setTimeout(startSinglePlantEvolution, 1000);
     };
   </script>
 
